@@ -1,0 +1,69 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Employee {
+  id             Int      @id @default(autoincrement())
+  fullName       String
+  position       String
+  phone          String
+  email          String
+  homeAdress     String
+  locationId     Int
+  salaryFixed    Float
+  salarayPercent Float
+  availableSalary Float
+  passportNumber String
+  INN            String
+  location       Location @relation(fields: [locationId], references: [id])
+}
+
+model Location {
+  id            Int       @id @default(autoincrement())
+  name          String
+  adress        String?
+  priceMinimal  Float
+  priceForHour  Float
+  employees     Employee[]
+  shifts        Shift[]
+}
+
+model Shift {
+  id            Int      @id @default(autoincrement())
+  creatorId     Int
+  locationId    Int
+  location      Location @relation(fields: [locationId], references: [id])
+  startDate     DateTime
+  endDate       DateTime?
+  availableCash Float
+  totalCash     Float
+  totalMoney    Float
+  visits        Visit[]
+}
+
+model Visit {
+  id           Int      @id @default(autoincrement())
+  shiftId      Int
+  totemName    String
+  clientsAmount Int
+  price        Float
+  isPriceFixed Boolean
+  startAt      DateTime
+  endAt        DateTime?
+  resultPrice  Float
+  cash         Float
+  terminal     Float
+  comment      String?
+  shift        Shift    @relation(fields: [shiftId], references: [id])
+}

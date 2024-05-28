@@ -1,0 +1,19 @@
+version: "3.1"
+
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: anticafe
+    ports:
+      - "5445:5432"
+      # Changed port to 5445 instead of default 5432 to resolve post conflicts if any exists
+      # Rememder to user 5445 for any External connections (like pgAdmin etc.)
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+volumes:
+  db-data:
